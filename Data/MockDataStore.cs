@@ -2,9 +2,9 @@ using FraudCopilot.Models;
 
 namespace FraudCopilot.Data;
 
-public static class MockDataStore
+public sealed class MockDataStore
 {
-    public static IReadOnlyList<Account> Accounts { get; } =
+    public IReadOnlyList<Account> Accounts { get; } =
     [
         new Account
         {
@@ -39,7 +39,7 @@ public static class MockDataStore
     /// Includes mixed signals: cross-border shortly after domestic activity, amount spikes vs baseline,
     /// rapid small-ticket bursts, and off-hours purchases (fictional merchants and people).
     /// </summary>
-    public static IReadOnlyList<Transaction> Transactions { get; } =
+    public IReadOnlyList<Transaction> Transactions { get; } =
     [
         new Transaction
         {
@@ -153,7 +153,7 @@ public static class MockDataStore
         },
     ];
 
-    public static IReadOnlyList<FraudPattern> FraudPatterns { get; } =
+    public IReadOnlyList<FraudPattern> FraudPatterns { get; } =
     [
         new FraudPattern
         {
