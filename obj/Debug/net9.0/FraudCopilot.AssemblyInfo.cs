@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FraudCopilot")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+08dbc2e3072e8971f85b8327b6915ebb6643db6f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6880c015516fb1c8b83c8061acb6379fc2dce98a")]
 [assembly: System.Reflection.AssemblyProductAttribute("FraudCopilot")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FraudCopilot")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

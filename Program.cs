@@ -1,3 +1,4 @@
+using FraudCopilot.Filters;
 using FraudCopilot.Plugins;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
@@ -26,6 +27,9 @@ kernelBuilder.Plugins.AddFromType<RiskScoringPlugin>();
 kernelBuilder.Plugins.AddFromType<FraudReportPlugin>();
 
 var kernel = kernelBuilder.Build();
+kernel.AutoFunctionInvocationFilters.Add(new ToolLoggingFilter());
+kernel.AutoFunctionInvocationFilters.Add(new GuardrailFilter());
+
 var chat = kernel.GetRequiredService<IChatCompletionService>();
 
 const string systemPrompt =
@@ -52,8 +56,20 @@ var executionSettings = new OpenAIPromptExecutionSettings
     FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(),
 };
 
-Console.WriteLine("FraudCopilot — AI Fraud Investigation Agent");
+const string bannerTitle = "FraudCopilot — AI Fraud Investigation Agent";
+var bannerWidth = Math.Max(bannerTitle.Length + 4, 56);
+var bannerBorder = new string('=', bannerWidth);
+
+Console.ForegroundColor = ConsoleColor.DarkBlue;
+Console.WriteLine(bannerBorder);
+Console.WriteLine(bannerTitle);
+Console.WriteLine(bannerBorder);
+Console.ResetColor();
+
+Console.ForegroundColor = ConsoleColor.Gray;
 Console.WriteLine("Type an account to investigate or describe a task. Type 'exit' to quit.");
+Console.ResetColor();
+Console.WriteLine();
 
 while (true)
 {
@@ -76,10 +92,31 @@ while (true)
 
     history.AddUserMessage(input);
 
-    var result = await chat.GetChatMessageContentAsync(history, executionSettings, kernel);
-    history.Add(result);
+    Console.WriteLine();
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine("[FraudCopilot investigating...]");
+    Console.ResetColor();
+    Console.WriteLine();
+
+    try
+    {
+        var result = await chat.GetChatMessageContentAsync(history, executionSettings, kernel);
+        history.Add(result);
+
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine(result.Content);
+        Console.ResetColor();
+    }
+    catch (Exception ex)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine(ex.Message);
+        Console.ResetColor();
+    }
 
     Console.WriteLine();
-    Console.WriteLine(result.Content);
+    Console.ForegroundColor = ConsoleColor.DarkGray;
+    Console.WriteLine(new string('-', bannerWidth));
+    Console.ResetColor();
     Console.WriteLine();
 }
